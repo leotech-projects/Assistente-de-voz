@@ -31,7 +31,7 @@ def ouvir_comando():
         falar("Erro ao acessar o serviço de reconhecimento.")
         return ""
 
-# --- Funções ---
+# --- Funções de programas ---
 def abrir_programa(nome_programa, caminho):
     try:
         subprocess.Popen([caminho])
@@ -48,19 +48,18 @@ def fechar_programa(nome_processo):
             return
     falar(f"Programa {nome_processo} não está em execução.")
 
-# Controle de volume com Pycaw
+# --- Controle de volume ---
 def alterar_volume(valor):
     devices = AudioUtilities.GetSpeakers()
     interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
     volume = cast(interface, POINTER(IAudioEndpointVolume))
-    # valor em -65.25 (mudo) até 0.0 (100%)
     if valor == "aumentar":
         volume.SetMasterVolumeLevelScalar(min(volume.GetMasterVolumeLevelScalar() + 0.1, 1.0), None)
     elif valor == "diminuir":
         volume.SetMasterVolumeLevelScalar(max(volume.GetMasterVolumeLevelScalar() - 0.1, 0.0), None)
     falar(f"Volume {valor}")
 
-# Comandos Windows
+# --- Comandos Windows ---
 def desligar_pc():
     falar("Desligando o computador...")
     os.system("shutdown /s /t 5")
@@ -73,13 +72,22 @@ def abrir_configuracoes():
     falar("Abrindo configurações do Windows")
     subprocess.Popen(["start", "ms-settings:"], shell=True)
 
+def abrir_explorer():
+    falar("Abrindo o Explorador de Arquivos")
+    subprocess.Popen(["explorer"])
+
+def print_screen():
+    falar("Capturando tela")
+    subprocess.Popen(["snippingtool"])  # abre ferramenta de captura
+
 # --- Programas ---
 programas = {
     "bloco de notas": r"C:\Windows\System32\notepad.exe",
     "calculadora": r"C:\Windows\System32\calc.exe",
     "chrome": r"C:\Program Files\Google\Chrome\Application\chrome.exe",
     "edge": r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-    "firefox": r"C:\Program Files\Mozilla Firefox\firefox.exe"
+    "firefox": r"C:\Program Files\Mozilla Firefox\firefox.exe",
+    "vlc": r"C:\Program Files\VideoLAN\VLC\vlc.exe"
 }
 
 # --- Sites ---
@@ -96,11 +104,11 @@ sites = {
 while True:
     comando = ouvir_comando()
 
-    # Abrir sites/programas
+    # Abrir programas ou sites
     if "abrir" in comando:
         aberto = False
 
-        # Abrir site com navegador específico
+        # Sites com navegador específico
         if "site" in comando:
             for nome, url in sites.items():
                 if nome in comando:
@@ -119,7 +127,7 @@ while True:
                     aberto = True
                     break
 
-        # Abrir programa
+        # Programas
         if not aberto:
             for nome, caminho in programas.items():
                 if nome in comando:
@@ -127,7 +135,7 @@ while True:
                     aberto = True
                     break
 
-        # Abrir site sem navegador específico
+        # Sites sem navegador específico
         if not aberto:
             for nome, url in sites.items():
                 if nome in comando:
@@ -150,19 +158,23 @@ while True:
         if not fechado:
             falar("Não reconheci o programa para fechar.")
 
-    # Comandos de volume
+    # Volume
     elif "aumentar volume" in comando:
         alterar_volume("aumentar")
     elif "diminuir volume" in comando:
         alterar_volume("diminuir")
 
-    # Comandos Windows
+    # Windows
     elif "desligar" in comando:
         desligar_pc()
     elif "reiniciar" in comando:
         reiniciar_pc()
     elif "abrir configurações" in comando:
         abrir_configuracoes()
+    elif "abrir explorer" in comando:
+        abrir_explorer()
+    elif "print screen" in comando or "capturar tela" in comando:
+        print_screen()
 
     # Encerrar assistente
     elif "sair" in comando or "encerrar" in comando:
