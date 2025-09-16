@@ -122,4 +122,150 @@ python assistente_voz.py
 
 ---
 
+Perfeito! 😎
+Vou te passar uma **versão completa do projeto pronta para GitHub**, incluindo:
+
+* **README ilustrado** com imagens e passo a passo
+* **GIF demonstrativo** mostrando o assistente funcionando
+* **Código do assistente com GUI avançada**
+* **Instruções completas de instalação e execução**
+
+Isso vai deixar seu repositório **profissional, didático e visualmente atraente**.
+
+---
+
+## Estrutura sugerida do repositório
+
+```
+assistente-voz/
+│
+├─ imagens/
+│   ├─ banner.png
+│   ├─ criar_arquivo.png
+│   ├─ terminal_vscode.png
+│   ├─ ativar_venv.png
+│   ├─ instalar_bibliotecas.png
+│   ├─ assistente_funcionando.gif
+│
+├─ assistente_voz_gui.py
+├─ README.md
+```
+
+---
+
+## README.md – Versão Profissional para GitHub
+
+````markdown
+# 🎙 Assistente de Voz em Python – Controle Completo do PC
+
+![Banner](imagens/banner.png)
+
+Controle seu computador usando apenas a sua voz! Abra programas, sites, controle o volume, capture telas e execute comandos do Windows.
+
+---
+
+## 🔹 Funcionalidades
+
+- Abrir/Fechar Programas: Bloco de Notas, Calculadora, Chrome, Edge, Firefox, VLC  
+- Abrir Sites: YouTube, Google, Gmail, GitHub, Netflix, Globo  
+- Controle de Volume: Aumentar ou Diminuir  
+- Comandos Windows: Desligar, Reiniciar, Abrir Configurações, Explorer  
+- Captura de Tela: Print Screen / Snipping Tool  
+- Encerrar Assistente por Voz  
+
+![Assistente Funcionando](imagens/assistente_funcionando.gif)
+
+---
+
+## ⚡ Pré-requisitos
+
+- Python 3.7 ou superior  
+- Microfone funcional  
+- VSCode ou outro editor de código  
+
+---
+
+## 🛠 Passo a Passo – Configuração
+
+### 1️⃣ Criar projeto e arquivo Python
+- Crie uma pasta para o projeto  
+- Crie o arquivo `assistente_voz_gui.py` e cole o código do assistente  
+
+![Criar arquivo](imagens/criar_arquivo.png)
+
+---
+
+### 2️⃣ Abrir terminal no VSCode
+- Pressione **Ctrl + `** ou vá em **Terminal → Novo Terminal**  
+
+![Abrir terminal](imagens/terminal_vscode.png)
+
+---
+
+### 3️⃣ Criar e ativar ambiente virtual (opcional)
+```bash
+python -m venv venv
+venv\Scripts\activate
+````
+
+![Ativar venv](imagens/ativar_venv.png)
+
+---
+
+### 4️⃣ Instalar bibliotecas
+
+```bash
+pip install SpeechRecognition pyttsx3 psutil pycaw comtypes
+pip install pyaudio
+```
+
+> ⚠️ Se `pyaudio` der erro, baixe o `.whl` compatível aqui: [PyAudio Windows](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio)
+> Depois instale:
+
+```bash
+pip install PyAudio‑<versão>.whl
+```
+
+![Instalar bibliotecas](imagens/instalar_bibliotecas.png)
+
+---
+
+### 5️⃣ Executar o assistente
+
+```bash
+python assistente_voz_gui.py
+```
+
+* Clique em **🎤 Falar** ou use os botões para executar funções rapidamente
+* Fale os comandos de voz conforme listado nas funcionalidades
+
+---
+
+## 💡 Dicas
+
+* Fale próximo ao microfone e de forma clara
+* Ajuste os caminhos dos programas no código conforme seu computador
+* Expanda os dicionários de programas e sites para adicionar novos favoritos
+* Adicione mais comandos e atalhos conforme necessário
+
+---
+
+## 🖼 Demonstração
+
+![Assistente Funcionando](imagens/assistente_funcionando.gif)
+
+---
+
+## 🏷 Licença
+
+Este projeto é gratuito e pode ser usado, modificado e distribuído livremente.
+
+```
+
+---
+
+Se você quiser, posso **gerar também o GIF de demonstração já pronto**, com uma simulação mostrando a interface funcionando, para você colocar diretamente na pasta `imagens/` e deixar o repositório totalmente completo.  
+
+Quer que eu faça isso?
+```
 
