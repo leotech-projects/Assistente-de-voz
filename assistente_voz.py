@@ -3,8 +3,12 @@ import pyttsx3
 import subprocess
 import psutil
 import webbrowser
+import os
+from ctypes import POINTER, cast
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-# Inicializa o motor de voz
+# Inicializa voz
 engine = pyttsx3.init()
 
 def falar(texto):
@@ -27,6 +31,7 @@ def ouvir_comando():
         falar("Erro ao acessar o serviço de reconhecimento.")
         return ""
 
+# --- Funções ---
 def abrir_programa(nome_programa, caminho):
     try:
         subprocess.Popen([caminho])
@@ -43,7 +48,32 @@ def fechar_programa(nome_processo):
             return
     falar(f"Programa {nome_processo} não está em execução.")
 
-# Programas instalados (ajuste caminhos conforme seu PC)
+# Controle de volume com Pycaw
+def alterar_volume(valor):
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+    # valor em -65.25 (mudo) até 0.0 (100%)
+    if valor == "aumentar":
+        volume.SetMasterVolumeLevelScalar(min(volume.GetMasterVolumeLevelScalar() + 0.1, 1.0), None)
+    elif valor == "diminuir":
+        volume.SetMasterVolumeLevelScalar(max(volume.GetMasterVolumeLevelScalar() - 0.1, 0.0), None)
+    falar(f"Volume {valor}")
+
+# Comandos Windows
+def desligar_pc():
+    falar("Desligando o computador...")
+    os.system("shutdown /s /t 5")
+
+def reiniciar_pc():
+    falar("Reiniciando o computador...")
+    os.system("shutdown /r /t 5")
+
+def abrir_configuracoes():
+    falar("Abrindo configurações do Windows")
+    subprocess.Popen(["start", "ms-settings:"], shell=True)
+
+# --- Programas ---
 programas = {
     "bloco de notas": r"C:\Windows\System32\notepad.exe",
     "calculadora": r"C:\Windows\System32\calc.exe",
@@ -52,7 +82,7 @@ programas = {
     "firefox": r"C:\Program Files\Mozilla Firefox\firefox.exe"
 }
 
-# Sites favoritos
+# --- Sites ---
 sites = {
     "youtube": "https://www.youtube.com",
     "google": "https://www.google.com",
@@ -62,14 +92,15 @@ sites = {
     "globo": "https://www.globo.com"
 }
 
+# --- Loop principal ---
 while True:
     comando = ouvir_comando()
 
-    # --- ABRIR PROGRAMAS ---
+    # Abrir sites/programas
     if "abrir" in comando:
         aberto = False
 
-        # Caso: "abrir site do X no navegador Y"
+        # Abrir site com navegador específico
         if "site" in comando:
             for nome, url in sites.items():
                 if nome in comando:
@@ -88,7 +119,7 @@ while True:
                     aberto = True
                     break
 
-        # Caso: "abrir programa"
+        # Abrir programa
         if not aberto:
             for nome, caminho in programas.items():
                 if nome in comando:
@@ -96,7 +127,7 @@ while True:
                     aberto = True
                     break
 
-        # Caso: "abrir site simples" (sem navegador especificado)
+        # Abrir site sem navegador específico
         if not aberto:
             for nome, url in sites.items():
                 if nome in comando:
@@ -108,7 +139,7 @@ while True:
         if not aberto:
             falar("Não reconheci o programa ou site que você pediu.")
 
-    # --- FECHAR PROGRAMAS ---
+    # Fechar programas
     elif "fechar" in comando:
         fechado = False
         for nome in programas.keys():
@@ -119,8 +150,21 @@ while True:
         if not fechado:
             falar("Não reconheci o programa para fechar.")
 
-    # --- SAIR DO ASSISTENTE ---
+    # Comandos de volume
+    elif "aumentar volume" in comando:
+        alterar_volume("aumentar")
+    elif "diminuir volume" in comando:
+        alterar_volume("diminuir")
+
+    # Comandos Windows
+    elif "desligar" in comando:
+        desligar_pc()
+    elif "reiniciar" in comando:
+        reiniciar_pc()
+    elif "abrir configurações" in comando:
+        abrir_configuracoes()
+
+    # Encerrar assistente
     elif "sair" in comando or "encerrar" in comando:
         falar("Encerrando o assistente. Até mais!")
         break
-
